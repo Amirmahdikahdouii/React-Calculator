@@ -1,13 +1,112 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+* {
+    padding: 0;
+    margin: 0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#root {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 25%;
+    height: 80%;
+    display: flex;
+    border: 1px solid red;
+    padding: 1%;
+    flex-flow: row wrap;
+}
+
+.out-put {
+    height: 20%;
+    border: 1px solid black;
+    width: 100%;
+    display: flex;
+    padding: 0.5% 0 0;
+    flex-flow: row wrap;
+    background-color: blanchedalmond;
+
+}
+
+.previous-answer {
+    width: 100%;
+    height: 35%;
+    padding: 1%;
+    background-color: black;
+
+}
+
+#previous-answer-label, #answer-label {
+    width: 100%;
+    height: 100%;
+    display: block;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    direction: rtl;
+}
+
+#answer-label {
+    font-size: 25px;
+}
+
+.answer {
+    width: 100%;
+    height: 60%;
+    padding: 1%;
+    background-color: black;
+    margin: 1% 0 0;
+}
+
+.buttons-container {
+    height: 80%;
+    border: 1px solid red;
+    width: 100%;
+    margin: 1% 0 0;
+    padding: 1% 0;
+    display: flex;
+    flex-flow: column wrap;
+    align-content: center;
+    align-items: stretch;
+    justify-content: space-evenly;
+}
+
+.row {
+    /* border: 1px solid red; */
+    height: 20%;
+    width: 95%;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn {
+    width: 23%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    height: 70%;
+}
+
+.row-last>.btn {
+    font-size: 20px;
+    font-weight: bold;
+    width: 45%;
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        min-width: 30%;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .container {
+        min-width: 270px;
+    }
 }
