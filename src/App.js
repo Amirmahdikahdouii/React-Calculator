@@ -18,8 +18,8 @@ class App extends Component {
         }
     }
 
-    hasNegetive = (number) => {
-        number = number.split('-');
+    hasZero = (number) => {
+        number = number.split('0');
         if (number.length > 1) {
             return true
         } else {
@@ -35,6 +35,9 @@ class App extends Component {
             if (this.hasDot(previousNumber) && currentNumber === '.') {
                 return null
             }
+            if (this.hasZero(previousNumber) && currentNumber === "0"){
+                return null
+            }
             let number = previousNumber += currentNumber
             if (number.length > 6) {
                 return null;
@@ -46,6 +49,9 @@ class App extends Component {
         } else if (previousNumber !== "" && operator !== "") {
             previousNumber = this.state.num_2;
             if (this.hasDot(previousNumber) && currentNumber === '.') {
+                return null
+            }
+            if (this.hasZero(previousNumber) && currentNumber === "0"){
                 return null
             }
             let number = previousNumber += currentNumber;
