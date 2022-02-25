@@ -45,20 +45,20 @@ class App extends Component {
 
     calculation = (event) => {
         let num_1 = this.state.num_1, num_2 = this.state.num_2, operator = this.state.operator, answer,
-        previousAnswer = this.state.output;
+            previousAnswer = this.state.output;
         num_1 = parseFloat(num_1);
         num_2 = parseFloat(num_2);
-        if (operator === "-"){
+        if (operator === "-") {
             answer = num_1 - num_2;
-        }else if (operator === "+"){
+        } else if (operator === "+") {
             answer = num_1 + num_2;
-        }else if (operator === "*"){
+        } else if (operator === "*") {
             answer = num_1 * num_2;
-        }else if (operator === "/"){
+        } else if (operator === "/") {
             answer = num_1 / num_2;
         }
         this.setState({
-            num_1 : answer,
+            num_1: answer,
             operator: '',
             num_2: '',
             output: answer,
@@ -66,7 +66,140 @@ class App extends Component {
         })
     }
 
+    ACButtonHandler = (event) => {
+        this.setState({
+            num_1: '',
+            num_2: '',
+            operator: '',
+            output: '',
+            previousAnswer: ''
+        })
+    }
+
     render() {
+        let props = [
+            [
+                {
+                    type: 'clearButton',
+                    class: 'btn btn-danger',
+                    value: 'AC',
+                    method: this.ACButtonHandler
+                },
+                {
+                    type: 'clearButton',
+                    class: 'btn btn-danger',
+                    value: 'DEL',
+                    method: null
+                },
+                {
+                    type: 'operationButton',
+                    class: 'btn btn-success',
+                    value: '-',
+                    method: this.operatorGetter
+                },
+            ],
+            [
+                {
+                    type: 'numberButton',
+                    class: 'btn btn-dark',
+                    value: '7',
+                    method: this.numbersGetter
+                },
+                {
+                    type: 'numberButton',
+                    class: 'btn btn-dark',
+                    value: '8',
+                    method: this.numbersGetter
+                },
+                {
+                    type: 'numberButton',
+                    class: 'btn btn-dark',
+                    value: '9',
+                    method: this.numbersGetter
+                },
+                {
+                    type: 'operationButton',
+                    class: 'btn btn-success',
+                    value: '*',
+                    method: this.operatorGetter
+                },
+            ],
+            [
+                {
+                    type: 'numberButton',
+                    class: 'btn btn-dark',
+                    value: '4',
+                    method: this.numbersGetter
+                },
+                {
+                    type: 'numberButton',
+                    class: 'btn btn-dark',
+                    value: '5',
+                    method: this.numbersGetter
+                },
+                {
+                    type: 'numberButton',
+                    class: 'btn btn-dark',
+                    value: '6',
+                    method: this.numbersGetter
+                },
+                {
+                    type: 'operationButton',
+                    class: 'btn btn-success',
+                    value: '/',
+                    method: this.operatorGetter
+                },
+            ],
+            [
+                {
+                    type: 'numberButton',
+                    class: 'btn btn-dark',
+                    value: '1',
+                    method: this.numbersGetter
+                },
+                {
+                    type: 'numberButton',
+                    class: 'btn btn-dark',
+                    value: '2',
+                    method: this.numbersGetter
+                },
+                {
+                    type: 'numberButton',
+                    class: 'btn btn-dark',
+                    value: '3',
+                    method: this.numbersGetter
+                },
+                {
+                    type: 'operationButton',
+                    class: 'btn btn-success',
+                    value: '+',
+                    method: this.operatorGetter
+                },
+            ],
+            [
+                {
+                    type: 'numberButton',
+                    class: 'btn btn-warning',
+                    value: '.',
+                    method: null
+                },
+                {
+                    type: 'numberButton',
+                    class: 'btn btn-warning',
+                    value: '=',
+                    method: this.calculation
+                },
+            ],
+        ]
+        let result = props.map((items, index) => {
+            return (
+                <div className='row' key={index}>{items.map((button, i) => {
+                    return (
+                        <button className={button.class} key={i} onClick={button.method}>{button.value}</button>
+                    )
+                })}</div>
+            )
+        })
         return (
             <div className="container">
                 <div className="out-put">
@@ -78,38 +211,7 @@ class App extends Component {
                     </div>
                 </div>
                 <div className="buttons-container">
-                    <div className="row">
-                        <button className="btn btn-danger">AC</button>
-                        <button className="btn btn-danger">DEL</button>
-                        <button className="btn btn-success" onClick={this.operatorGetter}>-</button>
-                    </div>
-
-                    <div className="row">
-                        <button className="btn btn-dark" onClick={this.numbersGetter}>7</button>
-                        <button className="btn btn-dark" onClick={this.numbersGetter}>8</button>
-                        <button className="btn btn-dark" onClick={this.numbersGetter}>9</button>
-                        <button className="btn btn-success" onClick={this.operatorGetter}>*</button>
-                    </div>
-
-                    <div className="row">
-                        <button className="btn btn-dark" onClick={this.numbersGetter}>4</button>
-                        <button className="btn btn-dark" onClick={this.numbersGetter}>5</button>
-                        <button className="btn btn-dark" onClick={this.numbersGetter}>6</button>
-                        <button className="btn btn-success" onClick={this.operatorGetter}>/</button>
-                    </div>
-
-                    <div className="row">
-                        <button className="btn btn-dark" onClick={this.numbersGetter}>1</button>
-                        <button className="btn btn-dark" onClick={this.numbersGetter}>2</button>
-                        <button className="btn btn-dark" onClick={this.numbersGetter}>3</button>
-                        <button className="btn btn-success" onClick={this.operatorGetter}>+</button>
-                    </div>
-
-                    <div className="row row-last">
-                        <button className="btn btn-warning">.</button>
-                        <button className="btn btn-warning" onClick={this.calculation}>=</button>
-                    </div>
-
+                    {result}
                 </div>
             </div>
         )
@@ -117,3 +219,35 @@ class App extends Component {
 }
 
 export default App;
+
+{/* <div className="row">
+<button className="btn btn-danger">AC</button>
+<button className="btn btn-danger">DEL</button>
+<button className="btn btn-success" onClick={this.operatorGetter}>-</button>
+</div>
+
+<div className="row">
+<button className="btn btn-dark" onClick={this.numbersGetter}>7</button>
+<button className="btn btn-dark" onClick={this.numbersGetter}>8</button>
+<button className="btn btn-dark" onClick={this.numbersGetter}>9</button>
+<button className="btn btn-success" onClick={this.operatorGetter}>*</button>
+</div>
+
+<div className="row">
+<button className="btn btn-dark" onClick={this.numbersGetter}>4</button>
+<button className="btn btn-dark" onClick={this.numbersGetter}>5</button>
+<button className="btn btn-dark" onClick={this.numbersGetter}>6</button>
+<button className="btn btn-success" onClick={this.operatorGetter}>/</button>
+</div>
+
+<div className="row">
+<button className="btn btn-dark" onClick={this.numbersGetter}>1</button>
+<button className="btn btn-dark" onClick={this.numbersGetter}>2</button>
+<button className="btn btn-dark" onClick={this.numbersGetter}>3</button>
+<button className="btn btn-success" onClick={this.operatorGetter}>+</button>
+</div>
+
+<div className="row row-last">
+<button className="btn btn-warning">.</button>
+<button className="btn btn-warning" onClick={this.calculation}>=</button>
+</div> */}
