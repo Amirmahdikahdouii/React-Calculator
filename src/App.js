@@ -6,22 +6,52 @@ class App extends Component {
         num_2: '',
         operator: '',
         output: '',
-        previousAnswer: ''
+        previousAnswer: '',
+    }
+
+    hasDot = (number) => {
+        number = number.split('.');
+        if (number.length > 1) {
+            return true
+        } else if (number.length === 1) {
+            return false
+        }
+    }
+
+    hasNegetive = (number) => {
+        number = number.split('-');
+        if (number.length > 1) {
+            return true
+        } else {
+            return false
+        }
     }
 
     numbersGetter = (event) => {
         let currentNumber = event.target.innerText;
         let previousNumber = this.state.num_1;
-        let operator = this.state.operator;
+        let { operator } = this.state;
         if (operator === "") {
+            if (this.hasDot(previousNumber) && currentNumber === '.') {
+                return null
+            }
             let number = previousNumber += currentNumber
+            if (number.length > 6) {
+                return null;
+            }
             this.setState({
                 num_1: number,
                 output: number,
             })
         } else if (previousNumber !== "" && operator !== "") {
             previousNumber = this.state.num_2;
+            if (this.hasDot(previousNumber) && currentNumber === '.') {
+                return null
+            }
             let number = previousNumber += currentNumber;
+            if (number.length > 6) {
+                return null;
+            }
             let output = `${this.state.output}${currentNumber}`;
             this.setState({
                 num_2: number,
@@ -31,8 +61,19 @@ class App extends Component {
     }
 
     operatorGetter = (event) => {
-        let operator = this.state.operator;
-        let num_1 = this.state.num_1;
+        let { operator, num_1 } = this.state;
+        let negative = event.target.innerText == '-' ? true : false;
+        if (negative && num_1 === "") {
+            console.log(negative);
+            let output = '-'
+            this.setState({
+                num_1: output,
+                output: output,
+            })
+            return null
+        } else if (negative && num_1 === '-') {
+            return null
+        }
         if (operator === "" && num_1 !== "") {
             let currentOperator = event.target.innerText;
             let output = `${this.state.output} ${currentOperator} `;
@@ -44,10 +85,14 @@ class App extends Component {
     }
 
     calculation = (event) => {
-        let num_1 = this.state.num_1, num_2 = this.state.num_2, operator = this.state.operator, answer,
-            previousAnswer = this.state.output;
+        let { num_1, num_2, operator } = this.state;
+        let answer, previousAnswer = this.state.output;
+        if (num_2 === '') {
+            return null
+        }
         num_1 = parseFloat(num_1);
         num_2 = parseFloat(num_2);
+
         if (operator === "-") {
             answer = num_1 - num_2;
         } else if (operator === "+") {
@@ -56,6 +101,18 @@ class App extends Component {
             answer = num_1 * num_2;
         } else if (operator === "/") {
             answer = num_1 / num_2;
+            answer = answer.toFixed(2)
+        }
+        answer = answer.toString()
+        if (answer.length > 6) {
+            this.setState({
+                num_1: '',
+                operator: '',
+                num_2: '',
+                output: "Error",
+                previousAnswer: ''
+            })
+            return null
         }
         this.setState({
             num_1: answer,
@@ -76,6 +133,36 @@ class App extends Component {
         })
     }
 
+    DELButtonHandler = (event) => {
+        let { num_1, num_2, operator, previousAnswer } = this.state;
+        if (num_1 === "") {
+            return null;
+        } else if (num_1 !== "" && operator === "") {
+            num_1 = num_1.substring(0, num_1.length - 1);
+            if (previousAnswer !== "") {
+                this.setState({
+                    previousAnswer: '',
+                })
+            }
+            this.setState({
+                num_1: num_1,
+                output: num_1,
+            })
+        } else if (operator !== "" && num_2 === "") {
+            let hasDot = num_1.split('.')
+            this.setState({
+                operator: '',
+                output: `${num_1} `
+            })
+        } else if (num_2 !== '') {
+            num_2 = num_2.substring(0, num_2.length - 1);
+            this.setState({
+                num_2: num_2,
+                output: `${num_1} ${operator} ${num_2}`
+            })
+        }
+    }
+
     render() {
         let props = [
             [
@@ -89,7 +176,7 @@ class App extends Component {
                     type: 'clearButton',
                     class: 'btn btn-danger',
                     value: 'DEL',
-                    method: null
+                    method: this.DELButtonHandler,
                 },
                 {
                     type: 'operationButton',
@@ -177,11 +264,18 @@ class App extends Component {
                 },
             ],
             [
+
+                {
+                    type: 'numberButton',
+                    class: 'btn btn-dark',
+                    value: '0',
+                    method: this.numbersGetter
+                },
                 {
                     type: 'numberButton',
                     class: 'btn btn-warning',
                     value: '.',
-                    method: null
+                    method: this.numbersGetter
                 },
                 {
                     type: 'numberButton',
@@ -219,35 +313,3 @@ class App extends Component {
 }
 
 export default App;
-
-{/* <div className="row">
-<button className="btn btn-danger">AC</button>
-<button className="btn btn-danger">DEL</button>
-<button className="btn btn-success" onClick={this.operatorGetter}>-</button>
-</div>
-
-<div className="row">
-<button className="btn btn-dark" onClick={this.numbersGetter}>7</button>
-<button className="btn btn-dark" onClick={this.numbersGetter}>8</button>
-<button className="btn btn-dark" onClick={this.numbersGetter}>9</button>
-<button className="btn btn-success" onClick={this.operatorGetter}>*</button>
-</div>
-
-<div className="row">
-<button className="btn btn-dark" onClick={this.numbersGetter}>4</button>
-<button className="btn btn-dark" onClick={this.numbersGetter}>5</button>
-<button className="btn btn-dark" onClick={this.numbersGetter}>6</button>
-<button className="btn btn-success" onClick={this.operatorGetter}>/</button>
-</div>
-
-<div className="row">
-<button className="btn btn-dark" onClick={this.numbersGetter}>1</button>
-<button className="btn btn-dark" onClick={this.numbersGetter}>2</button>
-<button className="btn btn-dark" onClick={this.numbersGetter}>3</button>
-<button className="btn btn-success" onClick={this.operatorGetter}>+</button>
-</div>
-
-<div className="row row-last">
-<button className="btn btn-warning">.</button>
-<button className="btn btn-warning" onClick={this.calculation}>=</button>
-</div> */}
